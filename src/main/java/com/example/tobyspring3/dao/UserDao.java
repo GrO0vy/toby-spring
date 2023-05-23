@@ -14,14 +14,14 @@ public class UserDao {
     String dbUser = env.get("DB_USER");
     String dbPassword = env.get("DB_PASSWORD");
 
-    public void add() throws ClassNotFoundException, SQLException {
+    public void add(User user) throws ClassNotFoundException, SQLException {
         Class.forName("com.mysql.cj.jdbc.Driver");
         Connection conn = DriverManager.getConnection(dbHost,dbUser,dbPassword);
 
         PreparedStatement pstmt = conn.prepareStatement("insert into users(id, name, password) values (?, ?, ?)");
-        pstmt.setString(1,"1");
-        pstmt.setString(2,"mincheol");
-        pstmt.setString(3,"12341234");
+        pstmt.setString(1,user.getId());
+        pstmt.setString(2,user.getName());
+        pstmt.setString(3,user.getPassword());
 
         pstmt.executeUpdate();
     }
@@ -32,6 +32,10 @@ public class UserDao {
 
     public static void main(String[] args) throws SQLException, ClassNotFoundException {
         UserDao dao = new UserDao();
-        dao.add();
+        User user = new User();
+        user.setId("2");
+        user.setName("lee");
+        user.setPassword("909090");
+        dao.add(user);
     }
 }
