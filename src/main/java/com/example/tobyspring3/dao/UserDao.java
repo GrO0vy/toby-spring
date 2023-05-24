@@ -7,7 +7,12 @@ import java.util.Map;
 
 public abstract class UserDao {
 
-    ConnectionMaker connectionMaker = new NConnectionMaker();
+    ConnectionMaker connectionMaker;
+
+    public UserDao(){
+        this.connectionMaker = new NConnectionMaker();
+    }
+
     public abstract Connection getConnection() throws ClassNotFoundException, SQLException;
 //        Map<String, String> env = System.getenv();
 //        String dbHost = env.get("DB_HOST");
