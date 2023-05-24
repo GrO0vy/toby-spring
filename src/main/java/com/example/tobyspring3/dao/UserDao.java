@@ -5,24 +5,14 @@ import com.example.tobyspring3.domain.User;
 import java.sql.*;
 import java.util.Map;
 
-public abstract class UserDao {
+public class UserDao {
 
     ConnectionMaker connectionMaker;
 
-    public UserDao(){
-        this.connectionMaker = new NConnectionMaker();
+    public UserDao(ConnectionMaker connectionMaker){
+        this.connectionMaker = connectionMaker;
     }
 
-    public abstract Connection getConnection() throws ClassNotFoundException, SQLException;
-//        Map<String, String> env = System.getenv();
-//        String dbHost = env.get("DB_HOST");
-//        String dbUser = env.get("DB_USER");
-//        String dbPassword = env.get("DB_PASSWORD");
-//
-//        Class.forName("com.mysql.cj.jdbc.Driver");
-//        Connection conn = DriverManager.getConnection(dbHost,dbUser,dbPassword);
-//
-//        return conn;
 
     public void add(User user) throws ClassNotFoundException, SQLException {
 
@@ -59,14 +49,15 @@ public abstract class UserDao {
     }
 
     public static void main(String[] args) throws SQLException, ClassNotFoundException {
-        UserDao dao = new NUserDao();
+        ConnectionMaker cm = new NConnectionMaker();
+        UserDao dao = new UserDao(cm);
         User user = new User();
-        user.setId("6");
+        user.setId("7");
         user.setName("lee");
         user.setPassword("909090");
         dao.add(user);
 
-        User selectedUser = dao.get("5");
+        User selectedUser = dao.get("7");
         System.out.println(selectedUser.getId());
         System.out.println(selectedUser.getName());
         System.out.println(selectedUser.getPassword());
