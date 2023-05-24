@@ -7,7 +7,7 @@ import java.util.Map;
 
 public abstract class UserDao {
 
-    SimpleConnectionMaker connectionMaker = new SimpleConnectionMaker();
+    ConnectionMaker connectionMaker = new NConnectionMaker();
     public abstract Connection getConnection() throws ClassNotFoundException, SQLException;
 //        Map<String, String> env = System.getenv();
 //        String dbHost = env.get("DB_HOST");
@@ -21,7 +21,7 @@ public abstract class UserDao {
 
     public void add(User user) throws ClassNotFoundException, SQLException {
 
-        Connection conn = connectionMaker.makeNewConnection();
+        Connection conn = connectionMaker.makeConnection();
         PreparedStatement pstmt = conn.prepareStatement("insert into users(id, name, password) values (?, ?, ?)");
         pstmt.setString(1,user.getId());
         pstmt.setString(2,user.getName());
@@ -34,7 +34,7 @@ public abstract class UserDao {
     }
 
     public User get(String id) throws ClassNotFoundException, SQLException {
-        Connection conn = connectionMaker.makeNewConnection();
+        Connection conn = connectionMaker.makeConnection();
 
         PreparedStatement pstmt = conn.prepareStatement("select id, name, password from users where id = ?");
         pstmt.setString(1, id);
@@ -56,7 +56,7 @@ public abstract class UserDao {
     public static void main(String[] args) throws SQLException, ClassNotFoundException {
         UserDao dao = new NUserDao();
         User user = new User();
-        user.setId("5");
+        user.setId("6");
         user.setName("lee");
         user.setPassword("909090");
         dao.add(user);
