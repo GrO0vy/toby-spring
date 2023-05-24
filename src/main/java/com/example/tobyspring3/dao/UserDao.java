@@ -6,15 +6,22 @@ import java.sql.*;
 import java.util.Map;
 
 public class UserDao {
-    Map<String, String> env = System.getenv();
-    String dbHost = env.get("DB_HOST");
-    String dbUser = env.get("DB_USER");
-    String dbPassword = env.get("DB_PASSWORD");
 
-    public void add(User user) throws ClassNotFoundException, SQLException {
+    public Connection getConnection() throws ClassNotFoundException, SQLException {
+        Map<String, String> env = System.getenv();
+        String dbHost = env.get("DB_HOST");
+        String dbUser = env.get("DB_USER");
+        String dbPassword = env.get("DB_PASSWORD");
+
         Class.forName("com.mysql.cj.jdbc.Driver");
         Connection conn = DriverManager.getConnection(dbHost,dbUser,dbPassword);
 
+        return conn;
+    }
+
+    public void add(User user) throws ClassNotFoundException, SQLException {
+
+        Connection conn = getConnection();
         PreparedStatement pstmt = conn.prepareStatement("insert into users(id, name, password) values (?, ?, ?)");
         pstmt.setString(1,user.getId());
         pstmt.setString(2,user.getName());
@@ -27,10 +34,7 @@ public class UserDao {
     }
 
     public User get(String id) throws ClassNotFoundException, SQLException {
-        Class.forName("com.mysql.cj.jdbc.Driver");
-        Connection conn = DriverManager.getConnection(
-                dbHost,dbUser,dbPassword
-        );
+        Connection conn = getConnection();
 
         PreparedStatement pstmt = conn.prepareStatement("select id, name, password from users where id = ?");
         pstmt.setString(1, id);
